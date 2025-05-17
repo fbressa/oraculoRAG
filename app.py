@@ -2,6 +2,9 @@ import streamlit as st
 
 TIPOS_VALIDOS = ["Youtube", "Site", "pdf", "txt", "csv", "docx", "pptx"]
 
+CONFIG_MODELOS = {"Groq": {"modelos": ["gemma2-9b-it", "llama-3.3-70b-versatile"]},
+                  "OpenAI": {"modelos": ["gpt-3.5-turbo-0125", "o4-mini-2025-04-16", "chatgpt-4o-latest", "gpt-4.1-mini-2025-04-14"]}}
+
 def page_chat():
     st.header("Chat with AI")
     
@@ -47,11 +50,16 @@ def sidebar():
         if tipo_arquivo == "pptx":
             arquivo = st.file_uploader("Selecione o arquivo PPTX", type=["pptx"])
 
-
-
     with tabs[1]:
         st.header("Seleção de modelos")
-        
+        provedor = st.selectbox("Escolha um provedor", CONFIG_MODELOS.keys())
+        modelo = st.selectbox("Escolha um modelo", CONFIG_MODELOS[provedor]["modelos"])
+        api_key = st.text_input(f"Cole sua chave de API para o provedor {provedor}", value=st.session_state.get(f'api_key_{provedor}', ''), type="password")
+
+        if st.button("Salvar configuração"):
+            st.session_state[f'api_key_{provedor}'] = api_key
+            st.success(f"Chave de API para {provedor} salva com sucesso!")
+        st.info("As chaves de API são armazenadas em sessão e não são salvas permanentemente.")
 
 def main():
     page_chat()
