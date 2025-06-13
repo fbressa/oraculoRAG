@@ -78,10 +78,10 @@ def sidebar():
         modelo = st.selectbox("Escolha um modelo", CONFIG_MODELOS[provedor]["modelos"])
         api_key = st.text_input(f"Cole sua chave de API para o provedor {provedor}", value=st.session_state.get(f'api_key_{provedor}', ''), type="password")
 
-        if st.button("Salvar configuração"):
+        if st.button("Salvar configuração", use_container_width=True):
             st.session_state[f'api_key_{provedor}'] = api_key
             st.success(f"Chave de API para {provedor} salva com sucesso!")
-        st.info("As chaves de API são armazenadas em sessão e não são salvas permanentemente.")
+        
 
     if st.button("Carregar modelo", use_container_width=True):
         carrega_modelo(provedor, modelo, api_key)
