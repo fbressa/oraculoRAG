@@ -3,36 +3,51 @@ from langchain_community.document_loaders import (WebBaseLoader,
                                                  CSVLoader,
                                                  PyPDFLoader,
                                                  TextLoader)
+from youtube_transcript_api import (YouTubeTranscriptApi,
+    NoTranscriptFound, TranscriptsDisabled, VideoUnavailable)
+import streamlit as st
+from fake_useragent import UserAgent
+from time import sleep
+import os
 
-def carreag_site(url):
-
-    loader = WebBaseLoader(url)
-    lista_documentos = loader.load()
-    documento = '\n''\n'.join([doc.page_content for doc in lista_documentos])
+def carrega_site(url):
+    documento = ''
+    for i in range(5):
+        try:
+            os.environ['USER_AGENT'] = UserAgent().random
+            loader = WebBaseLoader(url, raise_for_status=True)
+            lista_documentos = loader.load()
+            documento = '\n\n'.join([doc.page_content for doc in lista_documentos])
+            break
+        except:
+            print(f'Erro ao carregar o site {i+1}')
+            sleep(3)
+    if documento == '':
+        st.error('Não foi possível carregar o site')
+        st.stop()
     return documento
 
-def carreag_youtube(video_id):
-
+def carrega_youtube(video_id):
     loader = YoutubeLoader(video_id, add_video_info= False, language="pt-br")
     lista_documentos = loader.load()
     documento = '\n''\n'.join([doc.page_content for doc in lista_documentos])
     return documento
 
-def carreag_csv(caminho):
+def carrega_csv(caminho):
 
     loader = CSVLoader(caminho)
     lista_documentos = loader.load()
     documento = '\n''\n'.join([doc.page_content for doc in lista_documentos])
     return documento
 
-def carreag_pdf(caminho):
+def carrega_pdf(caminho):
 
     loader = PyPDFLoader(caminho)
     lista_documentos = loader.load()
     documento = '\n''\n'.join([doc.page_content for doc in lista_documentos])
     return documento
 
-def carreag_pdf(caminho):
+def carrega_txt(caminho):
 
     loader = TextLoader(caminho)
     lista_documentos = loader.load()
