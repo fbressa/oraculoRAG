@@ -153,7 +153,7 @@ Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalh
 
 ## 👤 Autor
 
-**Felipe Bressa**
+**Filipe Bressanelli**
 - GitHub: [@fbressa](https://github.com/fbressa)
 
 ## 🐛 Problemas Conhecidos
